@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vote - Secure Voting System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">VotingGuard</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="results.html">Results</a></li>
+                    <li class="nav-item"><a class="nav-link" href="help.html">Help</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1 class="text-center">Vote for Your Candidates</h1>
+        <p class="text-center">Select one candidate per position.</p>
+
+        <form id="voteForm" class="card p-4 shadow">
+            <!-- Position 1 -->
+            <div class="mb-4">
+                <h4>Mayor</h4>
+                <label><input type="radio" name="Mayor" value="John Doe"> John Doe</label><br>
+                <label><input type="radio" name="Mayor" value="Jane Smith"> Jane Smith</label>
+            </div>
+
+            <!-- Position 2 -->
+            <div class="mb-4">
+                <h4>City Council - District 1</h4>
+                <label><input type="radio" name="Council1" value="Alice Johnson"> Alice Johnson</label><br>
+                <label><input type="radio" name="Council1" value="Bob Richards"> Bob Richards</label>
+            </div>
+
+            <!-- Position 3 -->
+            <div class="mb-4">
+                <h4>City Council - District 2</h4>
+                <label><input type="radio" name="Council2" value="David Brown"> David Brown</label><br>
+                <label><input type="radio" name="Council2" value="Sarah White"> Sarah White</label>
+            </div>
+
+            <!-- Position 4 -->
+            <div class="mb-4">
+                <h4>Governor</h4>
+                <label><input type="radio" name="Governor" value="Michael Green"> Michael Green</label><br>
+                <label><input type="radio" name="Governor" value="Emma Wilson"> Emma Wilson</label>
+            </div>
+
+            <!-- Position 5 -->
+            <div class="mb-4">
+                <h4>Senator</h4>
+                <label><input type="radio" name="Senator" value="Chris Adams"> Chris Adams</label><br>
+                <label><input type="radio" name="Senator" value="Sophia Martinez"> Sophia Martinez</label>
+            </div>
+
+            <!-- Position 6 -->
+            <div class="mb-4">
+                <h4>School Board - District A</h4>
+                <label><input type="radio" name="SchoolA" value="Oliver Clark"> Oliver Clark</label><br>
+                <label><input type="radio" name="SchoolA" value="Isabella Lewis"> Isabella Lewis</label>
+            </div>
+
+            <!-- Position 7 -->
+            <div class="mb-4">
+                <h4>School Board - District B</h4>
+                <label><input type="radio" name="SchoolB" value="Benjamin Scott"> Benjamin Scott</label><br>
+                <label><input type="radio" name="SchoolB" value="Ava Hall"> Ava Hall</label>
+            </div>
+
+            <!-- Position 8 -->
+            <div class="mb-4">
+                <h4>State Representative</h4>
+                <label><input type="radio" name="Representative" value="Daniel Harris"> Daniel Harris</label><br>
+                <label><input type="radio" name="Representative" value="Emily Wright"> Emily Wright</label>
+            </div>
+
+            <!-- Position 9 -->
+            <div class="mb-4">
+                <h4>Sheriff</h4>
+                <label><input type="radio" name="Sheriff" value="William King"> William King</label><br>
+                <label><input type="radio" name="Sheriff" value="Madison Young"> Madison Young</label>
+            </div>
+
+            <!-- Position 10 -->
+            <div class="mb-4">
+                <h4>County Commissioner</h4>
+                <label><input type="radio" name="Commissioner" value="Henry Carter"> Henry Carter</label><br>
+                <label><input type="radio" name="Commissioner" value="Natalie Roberts"> Natalie Roberts</label>
+            </div>
+
+            <!-- Position 11 -->
+            <div class="mb-4">
+                <h4>Attorney General</h4>
+                <label><input type="radio" name="Attorney" value="Ethan Anderson"> Ethan Anderson</label><br>
+                <label><input type="radio" name="Attorney" value="Mia Thompson"> Mia Thompson</label>
+            </div>
+
+            <!-- Position 12 -->
+            <div class="mb-4">
+                <h4>State Treasurer</h4>
+                <label><input type="radio" name="Treasurer" value="Luke Baker"> Luke Baker</label><br>
+                <label><input type="radio" name="Treasurer" value="Harper Edwards"> Harper Edwards</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Submit Vote</button>
+        </form>
+        <p id="voteMessage" class="text-center mt-3 text-success"></p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
