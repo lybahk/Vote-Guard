@@ -1,50 +1,73 @@
 from flask import Flask, request, jsonify
+import hashlib
 import json
-import os
 
 app = Flask(__name__)
 
-VOTES_FILE = "votes.json"
+# Store registered users and votes
+users = {}
+votes = {}
 
-# Function to load votes from JSON
-def load_votes():
-    if os.path.exists(VOTES_FILE):
-        with open(VOTES_FILE, "r") as file:
-            return json.load(file)
-    return {}
+# Simple Blockchain structure
+blockchain = []
 
-# Function to save votes
-def save_votes(votes):
-    with open(VOTES_FILE, "w") as file:
-        json.dump(votes, file, indent=4)
+def hash_block(block):
+    return hashlib.sha256(json.dumps(block, sort_keys=True).encode()).hexdigest()
 
-# API Endpoint to Submit a Vote
-@app.route('/submit_vote', methods=['POST'])
-def submit_vote():
+def create_block(data):
+    previous_hash = blockchain[-1]["hash"] if blockchain else "0"
+    block = {"index": len(blockchain) + 1, "data": data, "previous_hash": previous_hash}
+    block["hash"] = hash_block(block)
+    blockchain.append(block)
+
+@app.route("/register", methods=["POST"])
+def register():
     data = request.json
-    position = data.get("position")
-    candidate = data.get("candidate")
+    username, password = data["username"], data["password"]
+    if username in users:
+        return jsonify({"message": "User already exists"}), 400
+    users[username] = password
+    return jsonify({"message": "Registration successful!"}), 200
 
-    if not position or not candidate:
-        return jsonify({"error": "Invalid vote data"}), 400
+@app.route("/login", methods=["POST"])
+def login():
+    data = request.json
+    username, password = data["username"], data["password"]
+    if users.get(username) == password:
+        return jsonify({"message": "Login successful"}), 200
+    return jsonify({"message": "Invalid credentials"}), 401
 
-    votes = load_votes()
-    if position not in votes:
-        votes[position] = {}
+@app.route("/candidates", methods=["GET"])
+def get_candidates():
+    candidates = {
+        "Mayor": ["John Doe", "Jane Smith"],
+        "Governor": ["Alice Brown", "Bob Johnson"],
+        "Senator": ["Emily Davis", "Michael White"]
+    }
+    return jsonify({"candidates": candidates}), 200
 
-    if candidate in votes[position]:
-        votes[position][candidate] += 1
-    else:
-        votes[position][candidate] = 1
+@app.route("/vote", methods=["POST"])
+def vote():
+    data = request.json
+    username = data["username"]
+    if username in votes:
+        return jsonify({"message": "User has already voted!"}), 403
+    
+    votes[username] = data["votes"]
+    create_block(data["votes"])
+    return jsonify({"message": "Vote recorded!"}), 200
 
-    save_votes(votes)
-    return jsonify({"message": "Vote submitted successfully!", "votes": votes})
+@app.route("/results", methods=["GET"])
+def results():
+    tally = {}
+    for vote in votes.values():
+        for position, candidate in vote.items():
+            if position not in tally:
+                tally[position] = {}
+            if candidate not in tally[position]:
+                tally[position][candidate] = 0
+            tally[position][candidate] += 1
+    return jsonify({"results": tally}), 200
 
-# API Endpoint to Fetch Results
-@app.route('/get_results', methods=['GET'])
-def get_results():
-    votes = load_votes()
-    return jsonify(votes)
-
-if __name__ == '__main__':
-    app.run(port=5000)
+if __name__ == "__main__":
+    app.run(debug=True)
