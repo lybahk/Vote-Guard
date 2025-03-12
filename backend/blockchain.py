@@ -1,14 +1,12 @@
 from flask import Flask, request, jsonify
 import hashlib
 import json
+import time
 
 app = Flask(__name__)
 
-# Store registered users and votes
 users = {}
 votes = {}
-
-# Simple Blockchain structure
 blockchain = []
 
 def hash_block(block):
@@ -16,14 +14,19 @@ def hash_block(block):
 
 def create_block(data):
     previous_hash = blockchain[-1]["hash"] if blockchain else "0"
-    block = {"index": len(blockchain) + 1, "data": data, "previous_hash": previous_hash}
+    block = {
+        "index": len(blockchain) + 1,
+        "timestamp": time.time(),
+        "data": data,
+        "previous_hash": previous_hash
+    }
     block["hash"] = hash_block(block)
     blockchain.append(block)
 
 @app.route("/register", methods=["POST"])
 def register():
     data = request.json
-    username, password = data["username"], data["password"]
+    username, password = data["username"], hashlib.sha256(data["password"].encode()).hexdigest()
     if username in users:
         return jsonify({"message": "User already exists"}), 400
     users[username] = password
@@ -32,7 +35,7 @@ def register():
 @app.route("/login", methods=["POST"])
 def login():
     data = request.json
-    username, password = data["username"], data["password"]
+    username, password = data["username"], hashlib.sha256(data["password"].encode()).hexdigest()
     if users.get(username) == password:
         return jsonify({"message": "Login successful"}), 200
     return jsonify({"message": "Invalid credentials"}), 401
@@ -52,7 +55,6 @@ def vote():
     username = data["username"]
     if username in votes:
         return jsonify({"message": "User has already voted!"}), 403
-    
     votes[username] = data["votes"]
     create_block(data["votes"])
     return jsonify({"message": "Vote recorded!"}), 200
@@ -62,10 +64,7 @@ def results():
     tally = {}
     for vote in votes.values():
         for position, candidate in vote.items():
-            if position not in tally:
-                tally[position] = {}
-            if candidate not in tally[position]:
-                tally[position][candidate] = 0
+            tally.setdefault(position, {}).setdefault(candidate, 0)
             tally[position][candidate] += 1
     return jsonify({"results": tally}), 200
 
