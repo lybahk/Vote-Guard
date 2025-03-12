@@ -12,6 +12,14 @@
         <button onclick="fetchResults()">View Results</button>
         <pre id="results"></pre>
     </div>
-    <script src="script.js"></script>
+    <script>
+        function fetchResults() {
+            fetch("/get_results")
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("results").innerText = JSON.stringify(data, null, 2);
+                });
+        }
+    </script>
 </body>
 </html>
